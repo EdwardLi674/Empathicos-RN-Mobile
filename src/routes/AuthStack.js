@@ -16,7 +16,8 @@ import {SubMenus} from '../screens/global/SubMenus';
 import {Content} from '../screens/global/Content';
 import {ContentPersonalMessage} from '../screens/global/ContentPersonalMessage';
 import {ContentSelfInquiry} from '../screens/global/ContentSelfInquiry';
-import {EnterMagicDoor} from '../screens/magicdoor/Main';
+import {MagicDoorIntroductory} from '../screens/magicdoor/Introductory';
+import {MagicDoorMenus} from '../screens/magicdoor/MainMenu';
 import {MiniCourse} from '../screens/magicdoor/MiniCourse';
 import {MyJournal} from '../screens/magicdoor/MyJournal';
 import {AskAna} from '../screens/global/AskAna';
@@ -237,7 +238,14 @@ export const AuthStack = () => {
       />
       <Drawer.Screen
         name="magic_door"
-        component={EnterMagicDoor}
+        component={MagicDoorIntroductory}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="magic_door_menus"
+        component={MagicDoorMenus}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

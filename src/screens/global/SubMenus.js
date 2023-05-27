@@ -92,7 +92,7 @@ export const SubMenus = props => {
             style={{marginTop: '50%'}}
           />
         ) : (
-          <View zIndex={1} style={{marginTop: height * 0.06}}>
+          <View zIndex={1} style={{marginTop: height * 0.07}}>
             {subjectTitle && (
               <Text
                 color="light.50"

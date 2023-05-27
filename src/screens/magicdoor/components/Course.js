@@ -15,7 +15,7 @@ export const Course = props => {
   // }, [selectedIdx]);
 
   return (
-    <View mt="8" zIndex="1">
+    <View mt={height * 0.07} zIndex="1">
       <Center>
         <View>
           <Image

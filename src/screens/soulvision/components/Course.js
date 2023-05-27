@@ -36,7 +36,7 @@ export const Course = props => {
   const playPauseIcon = status === 'playing' ? 'pause' : 'play';
 
   return (
-    <View mt="8" zIndex="1">
+    <View mt={height * 0.07} zIndex="1">
       <Center>
         <View>
           <Image

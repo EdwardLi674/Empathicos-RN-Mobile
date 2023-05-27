@@ -157,7 +157,7 @@ export const Profile = () => {
           w={width * 0.9}
           h={height * 0.53}
           ml="6"
-          mt="8"
+          mt={height * 0.07}
           bg="primary.600"
           borderColor="amber.300"
           borderWidth="2"

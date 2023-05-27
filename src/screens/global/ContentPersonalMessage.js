@@ -64,7 +64,7 @@ export const ContentPersonalMessage = () => {
           style={{marginTop: '50%'}}
         />
       ) : (
-        <Center style={{marginTop: height * 0.05}}>
+        <Center style={{marginTop: height * 0.07}}>
           <View>
             <Image
               source={{uri: content.image}}

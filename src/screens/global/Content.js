@@ -19,7 +19,7 @@ export const Content = props => {
 
   return (
     <Layout screenInfo={screenInfo}>
-      <Center style={{marginTop: height * 0.05}}>
+      <Center style={{marginTop: height * 0.07}}>
         <View>
           <Image
             source={{uri: menuObj.image}}

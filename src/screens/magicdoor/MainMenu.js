@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ActivityIndicator, useWindowDimensions} from 'react-native';
-import {Center, VStack, View, Text} from 'native-base';
+import {ActivityIndicator, useWindowDimensions} from 'react-native';
+import {VStack, View, Text} from 'native-base';
 import Toast from 'react-native-toast-message';
 import {baseUrl} from '../../utils/util';
 import {useUser} from '../../context/User';
 import {Layout} from '../../components/Layout';
 import {EmpaBtn} from '../../components/EmpaBtn';
-import {FormBtn} from '../../components/FormBtn';
 
-export const EnterMagicDoor = props => {
-  const id = props.route.params.id;
+export const MagicDoorMenus = props => {
   const {height, width} = useWindowDimensions();
   const {userData} = useUser();
 
@@ -24,12 +22,12 @@ export const EnterMagicDoor = props => {
   };
 
   useEffect(() => {
-    getSubCategoryMenus();
+    getMenus();
   }, []);
 
-  const getSubCategoryMenus = async () => {
+  const getMenus = async () => {
     const token = userData.access_token;
-    const url = `${baseUrl}/dashboard-subcategory/${id}`;
+    const url = `${baseUrl}/magic-door/menus`;
     var options = {
       headers: {
         Accept: 'application/json',
@@ -57,26 +55,19 @@ export const EnterMagicDoor = props => {
     }
   };
 
-  const onEmpaBtnPress = (menu, idx) => {
-    // const targetMenu = menus.find(menu => menu.id === id);
-    // const title = targetMenu.title;
-    switch (idx) {
-      case 0:
+  const onEmpaBtnPress = menu => {
+    const menuCat = menu.category;
+    switch (menuCat) {
+      case 'Magical Friends':
         props.navigation.navigate('journey');
         break;
-      case 1:
+      case 'Mini Course':
         props.navigation.navigate('mini_course', {
           id: menu.id,
           title: menu.title,
         });
         break;
-      case 2:
-        props.navigation.navigate('mini_course', {
-          id: menu.id,
-          title: menu.title,
-        });
-        break;
-      case 3:
+      case 'Journal':
         props.navigation.navigate('my_journal');
         break;
     }
@@ -102,12 +93,12 @@ export const EnterMagicDoor = props => {
               Choose Your Journey
             </Text>
             <VStack space={8} pb="5">
-              {menus.map((menu, idx) => (
+              {menus.map(menu => (
                 <EmpaBtn
                   title={menu.title}
                   key={menu.id}
                   info={menu.description}
-                  onBtnPress={() => onEmpaBtnPress(menu, idx)}
+                  onBtnPress={() => onEmpaBtnPress(menu)}
                   ht={45}
                   textMT={-9}
                   iconMT={-22}

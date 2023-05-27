@@ -71,7 +71,7 @@ export const Journeys = props => {
             style={{marginTop: '50%'}}
           />
         ) : (
-          <View zIndex={1} style={{marginTop: height * 0.06}}>
+          <View zIndex={1} style={{marginTop: height * 0.07}}>
             <VStack space={4}>
               {menus.map(menu => (
                 <EmpaPlainBtn
