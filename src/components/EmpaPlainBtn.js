@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Pressable,
-  Text,
-  Center,
-  WarningOutlineIcon,
-  Modal,
-  Button,
-  ScrollView,
-} from 'native-base';
+import {Pressable, Text, Center} from 'native-base';
 import {StyleSheet, Image, useWindowDimensions} from 'react-native';
 
 export const EmpaPlainBtn = props => {

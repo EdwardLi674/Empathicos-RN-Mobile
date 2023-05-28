@@ -25,18 +25,18 @@ export const Footer = props => {
           space="3"
           alignItems="center"
           justifyContent="space-between"
-          px="4"
+          px="2"
           pb="2">
           <Pressable onPress={() => navigation.navigate('visit_shop')}>
             <Image
               source={require('../assets/imgs/visit_shop.png')}
-              style={{width: width * 0.3, height: height * 0.15}}
+              style={{width: width * 0.35, height: height * 0.15}}
             />
           </Pressable>
           <Pressable onPress={() => navigation.navigate('ask_ana')}>
             <Image
               source={require('../assets/imgs/ask_ana.png')}
-              style={{width: width * 0.32, height: height * 0.16}}
+              style={{width: width * 0.35, height: height * 0.15}}
             />
           </Pressable>
         </HStack>

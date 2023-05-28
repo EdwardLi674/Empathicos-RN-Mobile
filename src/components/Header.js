@@ -70,7 +70,11 @@ export const Header = props => {
   return (
     <View>
       {screenInfo.header === '3' ? <HeaderBg num="1" /> : <HeaderBg />}
-      <HStack justifyContent={justifyContentStyle} alignItems="center" px="3">
+      <HStack
+        justifyContent={justifyContentStyle}
+        alignItems="center"
+        px="3"
+        pt="1">
         {screenInfo.header === '1' && (
           <Pressable onPress={() => navigation.openDrawer()} w="1/4">
             <HamburgerIcon size="7" color="white" />

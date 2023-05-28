@@ -15,6 +15,7 @@ import {JourneyTemplate} from '../screens/soulvision/JourneyTemplate';
 import {SubMenus} from '../screens/global/SubMenus';
 import {Content} from '../screens/global/Content';
 import {ContentPersonalMessage} from '../screens/global/ContentPersonalMessage';
+import {ContentMeetAna} from '../screens/global/ContentMeetAna';
 import {ContentSelfInquiry} from '../screens/global/ContentSelfInquiry';
 import {MagicDoorIntroductory} from '../screens/magicdoor/Introductory';
 import {MagicDoorMenus} from '../screens/magicdoor/MainMenu';
@@ -225,6 +226,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="content_personal_message"
         component={ContentPersonalMessage}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="content_meet_ana"
+        component={ContentMeetAna}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

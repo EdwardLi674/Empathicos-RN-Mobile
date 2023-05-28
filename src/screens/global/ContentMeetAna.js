@@ -1,0 +1,183 @@
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  useWindowDimensions,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
+import {
+  Icon,
+  ScrollView,
+  Center,
+  Text,
+  HStack,
+  VStack,
+  Pressable,
+} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Toast from 'react-native-toast-message';
+import call from 'react-native-phone-call';
+import {Layout} from '../../components/Layout';
+import {baseUrl} from '../../utils/util';
+import {useUser} from '../../context/User';
+import {EmpaPlainBtn} from '../../components/EmpaPlainBtn';
+
+export const ContentMeetAna = props => {
+  const {height, width} = useWindowDimensions();
+  const {userData} = useUser();
+
+  const regex = /(<([^>]+)>)/gi;
+
+  const screenInfo = {
+    title: 'Meet Ana',
+    subTitle: '',
+    header: '2',
+    footer: '1',
+  };
+
+  const [content, setContent] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getContent();
+  }, []);
+
+  const getContent = async () => {
+    const token = userData.access_token;
+    const url = `${baseUrl}/dashboard-category/meet-ana`;
+    var options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    try {
+      const result = await fetch(url, options);
+      const resResult = await result.json();
+      if (!resResult.status) {
+        Toast.show({
+          type: 'error',
+          text1: resResult.message,
+        });
+      } else {
+        setContent(resResult.results);
+      }
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network not working',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onFreeCallPress = () => {
+    const args = {
+      number: '9093900003', // String value with the number to call
+      prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call
+      skipCanOpen: true, // Skip the canOpenURL check
+    };
+    call(args).catch(console.error);
+  };
+
+  const onBookReadingPress = () => {
+    props.navigation.navigate('visit_shop');
+  };
+
+  return (
+    <Layout screenInfo={screenInfo}>
+      {loading ? (
+        <ActivityIndicator
+          color="#fff"
+          size="large"
+          style={{marginTop: '50%'}}
+        />
+      ) : (
+        <Center style={{marginTop: height * 0.07}}>
+          <ScrollView
+            bg="primary.100"
+            opacity="0.8"
+            mx="6"
+            py="3"
+            px="3"
+            borderRadius="6"
+            style={{height: height * 0.36}}>
+            <HStack space={3}>
+              <Image
+                source={{uri: content.image}}
+                style={{
+                  height: 120,
+                  width: '40%',
+                  borderRadius: 10,
+                }}
+              />
+              <VStack space={1} style={{width: '60%'}}>
+                <Text
+                  color="blue.700"
+                  fontSize="2xl"
+                  textAlign="center"
+                  fontFamily="CenturyGothic"
+                  pt="2">
+                  {content.title}
+                </Text>
+                <Text
+                  fontSize="md"
+                  fontFamily="CenturyGothic"
+                  pt="2"
+                  color="blue.700">
+                  {content.description.replace(regex, '').substring(0, 60)}
+                </Text>
+              </VStack>
+            </HStack>
+            <Text fontSize="md" fontFamily="CenturyGothic" color="blue.700">
+              {content.description
+                .replace(regex, '')
+                .substring(81, content.description.replace(regex, '').length)}
+            </Text>
+          </ScrollView>
+          <VStack space={7} alignItems="center" mt="6">
+            <EmpaPlainBtn
+              title="Book A Reading"
+              ht={50}
+              textMT={-10}
+              onBtnPress={onBookReadingPress}
+            />
+            <Pressable alignItems="center" onPress={onFreeCallPress}>
+              <Center>
+                <Image
+                  source={require('../../assets/imgs/rectangle_btn.png')}
+                  style={{width: 235, height: 50, resizeMode: 'stretch'}}
+                />
+                <HStack>
+                  <Icon
+                    as={MaterialCommunityIcons}
+                    name="phone"
+                    color="white"
+                    mt="-9"
+                    size={5}
+                  />
+                  <Text
+                    fontSize="lg"
+                    color="white"
+                    style={styles.btn}
+                    mt="-10"
+                    ml="4">
+                    Free Call
+                  </Text>
+                </HStack>
+              </Center>
+            </Pressable>
+          </VStack>
+        </Center>
+      )}
+    </Layout>
+  );
+};
+
+const styles = StyleSheet.create({
+  btn: {
+    fontFamily: 'CenturyGothic',
+    textTransform: 'capitalize',
+  },
+});

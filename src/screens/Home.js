@@ -73,6 +73,8 @@ export const Home = props => {
       });
     } else if (selectedMenuTitle === 'Personal Message') {
       props.navigation.navigate('content_personal_message');
+    } else if (selectedMenuTitle === 'Meet Ana') {
+      props.navigation.navigate('content_meet_ana');
     } else {
       props.navigation.navigate('sub_menus', {
         id: id,
