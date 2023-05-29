@@ -13,6 +13,7 @@ import {AudioCourse} from '../screens/soulvision/AudioCourse';
 import {Journeys} from '../screens/soulvision/Journeys';
 import {JourneyTemplate} from '../screens/soulvision/JourneyTemplate';
 import {SubMenus} from '../screens/global/SubMenus';
+import {About} from '../screens/global/About';
 import {Content} from '../screens/global/Content';
 import {ContentPersonalMessage} from '../screens/global/ContentPersonalMessage';
 import {ContentMeetAna} from '../screens/global/ContentMeetAna';
@@ -29,82 +30,123 @@ import {
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
+import Share from 'react-native-share';
 
 // const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = props => {
+  const onSharePress = () => {
+    let options = {
+      title: 'Empathicos',
+      message: 'Save time and use this app in a short time',
+      url: 'https://google.com',
+    };
+    Share.open(options)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        err && console.log(err);
+      });
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
         label="Shop"
-        onPress={() => console.log('Help')}
+        onPress={() => props.navigation.navigate('visit_shop')}
         inactiveTintColor="white"
         fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="Share Empathicos"
-        onPress={() => console.log('Help')}
+        onPress={() => onSharePress()}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
-      />
-      <DrawerItem
-        label="Blended Soul"
-        onPress={() => console.log('Help')}
-        inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="About Empathicos"
-        onPress={() => console.log('Help')}
+        onPress={() =>
+          props.navigation.navigate('about', {title: 'Empathicos'})
+        }
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="About Alesha"
-        onPress={() => console.log('Help')}
+        onPress={() => props.navigation.navigate('about', {title: 'alesha'})}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="About Paul Wagner"
-        onPress={() => console.log('Help')}
+        onPress={() =>
+          props.navigation.navigate('about', {title: 'paul wagner'})
+        }
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="About The Artist"
-        onPress={() => console.log('Help')}
+        onPress={() => props.navigation.navigate('about', {title: 'artist'})}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="Send Feedback"
         onPress={() => console.log('Help')}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="FAQ"
         onPress={() => console.log('Help')}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
       <DrawerItem
         label="Developed By"
         onPress={() => console.log('Help')}
         inactiveTintColor="white"
-        fontFamily="CenturyGothic"
-        fontWeight="700"
+        labelStyle={{
+          fontFamily: 'CenturyGothic',
+          fontSize: 17,
+          fontWeight: 'normal',
+        }}
       />
     </DrawerContentScrollView>
   );
@@ -289,6 +331,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="product"
         component={Product}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="about"
+        component={About}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

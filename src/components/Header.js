@@ -13,6 +13,7 @@ import {
   Icon,
   Divider,
   Center,
+  Badge,
 } from 'native-base';
 import Toast from 'react-native-toast-message';
 import {useUser} from '../context/User';
@@ -95,7 +96,30 @@ export const Header = props => {
         </Center>
         {screenInfo.header !== '0' && (
           <HStack w="1/4" justifyContent="flex-end">
-            {screenInfo.isCart && <Text>Cart</Text>}
+            {screenInfo.isCart && (
+              <VStack mr="5">
+                <Badge // bg="red.400"
+                  bg="info.500"
+                  rounded="full"
+                  opacity="0.8"
+                  mb={-4}
+                  mr={-3}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 12,
+                  }}>
+                  3
+                </Badge>
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name="cart"
+                  color="yellow.300"
+                  size={8}
+                />
+              </VStack>
+            )}
             <Menu
               trigger={triggerProps => {
                 return (

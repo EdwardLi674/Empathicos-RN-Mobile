@@ -10,7 +10,7 @@ export const Footer = props => {
   let footerEle = (
     <Image
       source={require('../assets/imgs/footer_home_bg.png')}
-      style={[styles.footerBg(width, height, 0.33)]}
+      style={[styles.footerBg(width, height, 0.3)]}
     />
   );
 

@@ -94,7 +94,7 @@ export const Home = props => {
           />
         ) : (
           <View mt={height * 0.08} zIndex={1}>
-            <VStack space={4} pb="5">
+            <VStack space={5} pb="5">
               {menus.map(menu => (
                 <EmpaBtn
                   title={menu.title}
@@ -110,7 +110,7 @@ export const Home = props => {
             <Center>
               <Image
                 source={require('../assets/imgs/image_doorway.png')}
-                style={{width: 200, height: 140, resizeMode: 'stretch'}}
+                style={{width: 210, height: 150, resizeMode: 'stretch'}}
               />
               <FormBtn title="Enter" onBtnPress={onEnter} />
             </Center>

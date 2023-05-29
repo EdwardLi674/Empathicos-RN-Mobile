@@ -96,8 +96,8 @@ export const Shop = () => {
           style={{marginTop: '50%'}}
         />
       ) : (
-        <ScrollView style={{height: height * 0.65}} mt="9">
-          <Center pb="20">
+        <ScrollView style={{height: height * 0.65}} mt={height * 0.07}>
+          <Center mb={height * 0.14}>
             {products.map(product => (
               <Pressable
                 key={product.id}
@@ -121,7 +121,7 @@ export const Shop = () => {
                     }}
                   />
                   <VStack space="2" px="2" style={{width: width * 0.6}}>
-                    <Text fontSize="lg" bold color="white">
+                    <Text fontSize="lg" color="white" fontFamily="GOTHICB">
                       {product.name}
                     </Text>
                     <Rating
