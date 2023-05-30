@@ -9,7 +9,16 @@ import {
 } from 'native-base';
 
 export const PlainTextArea = props => {
-  const {value, onChange, borderColor, borderRadius, placeholder} = props;
+  const {
+    value,
+    onChange,
+    borderColor,
+    borderRadius,
+    placeholder,
+    height,
+    textColor,
+    placeholderColor,
+  } = props;
 
   const localInputRef = useRef();
 
@@ -41,8 +50,9 @@ export const PlainTextArea = props => {
       fontSize="14"
       numberOfLines={10}
       placeholder={placeholder}
-      placeholderTextColor="gray.500"
-      h="150"
+      placeholderTextColor={placeholderColor}
+      color={textColor}
+      h={height}
       value={value}
       onChangeText={txt => onChange(txt)}
     />

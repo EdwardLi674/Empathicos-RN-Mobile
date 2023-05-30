@@ -167,7 +167,9 @@ export const MyJournal = props => {
               />
               <PlainTextArea
                 placeholder="Description"
+                placeholderColor="gray.500"
                 value={description}
+                height={150}
                 onChange={txt => onJounalChange(txt)}
               />
             </View>

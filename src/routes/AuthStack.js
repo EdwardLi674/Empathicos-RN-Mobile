@@ -14,6 +14,7 @@ import {Journeys} from '../screens/soulvision/Journeys';
 import {JourneyTemplate} from '../screens/soulvision/JourneyTemplate';
 import {SubMenus} from '../screens/global/SubMenus';
 import {About} from '../screens/global/About';
+import {Feedback} from '../screens/global/Feedback';
 import {Content} from '../screens/global/Content';
 import {ContentPersonalMessage} from '../screens/global/ContentPersonalMessage';
 import {ContentMeetAna} from '../screens/global/ContentMeetAna';
@@ -120,7 +121,7 @@ const CustomDrawerContent = props => {
       />
       <DrawerItem
         label="Send Feedback"
-        onPress={() => console.log('Help')}
+        onPress={() => props.navigation.navigate('feedback')}
         inactiveTintColor="white"
         labelStyle={{
           fontFamily: 'CenturyGothic',
@@ -338,6 +339,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="about"
         component={About}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="feedback"
+        component={Feedback}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

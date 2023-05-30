@@ -1,13 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import {useIsFocused} from '@react-navigation/native';
-import {useNavigation} from '@react-navigation/core';
-import {
-  Image,
-  useWindowDimensions,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {Image, useWindowDimensions, ActivityIndicator} from 'react-native';
 import {Center, View, ScrollView, Text} from 'native-base';
 import RenderHtml from 'react-native-render-html';
 import {useUser} from '../../context/User';

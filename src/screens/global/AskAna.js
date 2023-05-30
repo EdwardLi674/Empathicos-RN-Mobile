@@ -155,7 +155,9 @@ export const AskAna = () => {
                 <PlainTextArea
                   value={message}
                   onChange={onMessageChange}
+                  height={150}
                   borderColor="#0544a1"
+                  placeholderColor="gray.500"
                   borderRadius="lg"
                   placeholder="Your message"
                 />
