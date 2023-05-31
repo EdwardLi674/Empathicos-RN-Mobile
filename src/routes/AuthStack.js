@@ -15,6 +15,7 @@ import {JourneyTemplate} from '../screens/soulvision/JourneyTemplate';
 import {SubMenus} from '../screens/global/SubMenus';
 import {About} from '../screens/global/About';
 import {Feedback} from '../screens/global/Feedback';
+import {FAQ} from '../screens/global/FAQ';
 import {Content} from '../screens/global/Content';
 import {ContentPersonalMessage} from '../screens/global/ContentPersonalMessage';
 import {ContentMeetAna} from '../screens/global/ContentMeetAna';
@@ -32,6 +33,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import Share from 'react-native-share';
+import {Linking} from 'react-native';
 
 // const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -52,6 +54,21 @@ const CustomDrawerContent = props => {
       });
   };
 
+  const onDevelopedByPress = () => {
+    let url = 'https://creativelab.tv/';
+    Linking.openURL(url)
+      .then(data => {
+        console.log('Developed by creativelab');
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: "Can't open the corresponding website.",
+        });
+      });
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
@@ -67,7 +84,7 @@ const CustomDrawerContent = props => {
       />
       <DrawerItem
         label="Share Empathicos"
-        onPress={() => onSharePress()}
+        onPress={onSharePress}
         inactiveTintColor="white"
         labelStyle={{
           fontFamily: 'CenturyGothic',
@@ -131,7 +148,7 @@ const CustomDrawerContent = props => {
       />
       <DrawerItem
         label="FAQ"
-        onPress={() => console.log('Help')}
+        onPress={() => props.navigation.navigate('faq')}
         inactiveTintColor="white"
         labelStyle={{
           fontFamily: 'CenturyGothic',
@@ -141,7 +158,7 @@ const CustomDrawerContent = props => {
       />
       <DrawerItem
         label="Developed By"
-        onPress={() => console.log('Help')}
+        onPress={onDevelopedByPress}
         inactiveTintColor="white"
         labelStyle={{
           fontFamily: 'CenturyGothic',
@@ -346,6 +363,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="feedback"
         component={Feedback}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="faq"
+        component={FAQ}
         options={{
           drawerItemStyle: {display: 'none'},
         }}
