@@ -19,12 +19,14 @@ import {Rating} from 'react-native-ratings';
 import {Layout} from '../../components/Layout';
 import {baseUrl} from '../../utils/util';
 import {useUser} from '../../context/User';
+import {useCart} from '../../context/Cart';
 
 export const Shop = () => {
   const isFocused = useIsFocused();
 
   const {height, width} = useWindowDimensions();
   const {userData} = useUser();
+  const {onCart, cartData} = useCart();
 
   const navigation = useNavigation();
 
@@ -75,8 +77,18 @@ export const Shop = () => {
     }
   };
 
-  const onAddCartPress = () => {
-    console.log('product is added to cart');
+  const onAddCartPress = product => {
+    const tempCartData = [...cartData];
+    const productId = product.id;
+    const productInCart = tempCartData.find(
+      prodCart => prodCart.id === productId,
+    );
+
+    if (productInCart) return;
+
+    const productAddedToCart = {...product, amount: 1};
+    tempCartData.push(productAddedToCart);
+    onCart(tempCartData);
   };
 
   const onBuyNowPress = () => {
@@ -121,7 +133,10 @@ export const Shop = () => {
                     }}
                   />
                   <VStack space="2" px="2" style={{width: width * 0.6}}>
-                    <Text fontSize="lg" color="white" fontFamily="GOTHICB">
+                    <Text
+                      fontSize="lg"
+                      color="white"
+                      fontFamily="CenturyGothic">
                       {product.name}
                     </Text>
                     <Rating
@@ -144,8 +159,13 @@ export const Shop = () => {
                         variant="outline"
                         colorScheme="secondary"
                         py="1"
-                        onPress={onAddCartPress}
-                        _text={{color: 'white'}}>
+                        isDisabled={
+                          cartData.find(cd => cd.id === product.id)
+                            ? true
+                            : false
+                        }
+                        onPress={() => onAddCartPress(product)}
+                        _text={{color: 'white', fontFamily: 'CenturyGothic'}}>
                         Add to Cart
                       </Button>
                       <Button
@@ -154,7 +174,7 @@ export const Shop = () => {
                         colorScheme="secondary"
                         py="1"
                         onPress={onBuyNowPress}
-                        _text={{color: 'white'}}>
+                        _text={{color: 'white', fontFamily: 'CenturyGothic'}}>
                         Buy Now
                       </Button>
                     </HStack>

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {GlobalProvider} from './src/context/Global';
+import {CartProvider} from './src/context/Cart';
 import Toast from 'react-native-toast-message';
 import {UserProvider} from './src/context/User';
 import {Router} from './src/routes/Router';
@@ -24,16 +24,16 @@ const App = () => {
   }, []);
 
   return (
-    <GlobalProvider>
-      <UserProvider>
+    <UserProvider>
+      <CartProvider>
         <NativeBaseProvider>
           <WithSplashScreen isAppReady={isAppReady}>
             <Router />
             <Toast />
           </WithSplashScreen>
         </NativeBaseProvider>
-      </UserProvider>
-    </GlobalProvider>
+      </CartProvider>
+    </UserProvider>
   );
 };
 

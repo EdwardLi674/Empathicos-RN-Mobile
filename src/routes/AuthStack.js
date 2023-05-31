@@ -27,6 +27,7 @@ import {MyJournal} from '../screens/magicdoor/MyJournal';
 import {AskAna} from '../screens/global/AskAna';
 import {Shop} from '../screens/visitshop/Shop';
 import {Product} from '../screens/visitshop/Product';
+import {Cart} from '../screens/visitshop/Cart';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -349,6 +350,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="product"
         component={Product}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="cart"
+        component={Cart}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

@@ -1,10 +1,10 @@
 import React, {createContext, useState, useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const GlobalContext = createContext();
+const CartContext = createContext();
 
-const GlobalProvider = ({children}) => {
-  const [globalData, setGlobalData] = useState();
+const CartProvider = ({children}) => {
+  const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
     //Every time the App is opened, this provider is rendered and call de loadStorage function.
@@ -14,22 +14,22 @@ const GlobalProvider = ({children}) => {
   const loadStorageData = async () => {
     try {
       //Try get the data from Async Storage
-      const globalDataSerialized = await AsyncStorage.getItem('@GlobalData');
-      let _globalData = null;
-      if (globalDataSerialized) {
+      const cartDataSerialized = await AsyncStorage.getItem('@CartData');
+      let _cartData = null;
+      if (cartDataSerialized) {
         //If there are data, it's converted to an Object and the state is updated.
-        _globalData = JSON.parse(globalDataSerialized);
-        setGlobalData(_globalData);
+        _cartData = JSON.parse(cartDataSerialized);
+        setCartData(_cartData);
       }
     } catch (error) {
       console.log('Get async storage error: ', error);
     }
   };
 
-  const onScreen = async _screenData => {
+  const onCart = async _cartData => {
     try {
-      setGlobalData(_screenData);
-      await AsyncStorage.setItem('@GlobalData', JSON.stringify(_screenData));
+      setCartData(_cartData);
+      await AsyncStorage.setItem('@CartData', JSON.stringify(_cartData));
     } catch (error) {
       console.log('Set async storage error: ', error);
     }
@@ -38,22 +38,22 @@ const GlobalProvider = ({children}) => {
   return (
     //This component will be used to encapsulate the whole App,
     //so all components will have access to the Context
-    <GlobalContext.Provider value={{globalData, onScreen}}>
+    <CartContext.Provider value={{cartData, onCart}}>
       {children}
-    </GlobalContext.Provider>
+    </CartContext.Provider>
   );
 };
 
 //A simple hooks to facilitate the access to the LangContext
 // and permit components to subscribe to LangContext updates
-const useGlobal = () => {
-  const context = useContext(GlobalContext);
+const useCart = () => {
+  const context = useContext(CartContext);
 
   if (!context) {
-    throw new Error('useGlobal must be used within an GlobalProvider');
+    throw new Error('useCart must be used within an CartProvider');
   }
 
   return context;
 };
 
-export {GlobalContext, GlobalProvider, useGlobal};
+export {CartContext, CartProvider, useCart};

@@ -29,7 +29,7 @@ export const Product = props => {
   return (
     <>
       <Layout screenInfo={screenInfo}>
-        <ScrollView style={{height: height * 0.35}} mt="9">
+        <ScrollView style={{height: height * 0.35}} mt={height * 0.07}>
           <Center>
             <Image
               source={{uri: productDetail.img}}
