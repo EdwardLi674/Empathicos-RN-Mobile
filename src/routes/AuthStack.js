@@ -28,6 +28,7 @@ import {AskAna} from '../screens/global/AskAna';
 import {Shop} from '../screens/visitshop/Shop';
 import {Product} from '../screens/visitshop/Product';
 import {Cart} from '../screens/visitshop/Cart';
+import {Order} from '../screens/visitshop/Order';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -357,6 +358,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="cart"
         component={Cart}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="order"
+        component={Order}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

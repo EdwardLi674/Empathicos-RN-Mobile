@@ -16,7 +16,7 @@ import {Layout} from '../../components/Layout';
 import {useCart} from '../../context/Cart';
 import {ConfirmDialog} from './components/ConfirmDialog';
 
-export const Cart = () => {
+export const Cart = props => {
   const {height, width} = useWindowDimensions();
   const {cartData, onCart} = useCart();
 
@@ -71,20 +71,25 @@ export const Cart = () => {
               key={product.id}
               style={{width: width * 0.92}}
               bg="primary.700"
-              p="3"
+              px="3"
+              pb="3"
               mb="4"
               alignItems="center"
               borderColor="amber.400"
               borderRadius="10"
               borderWidth="2">
+              <Image
+                source={require('../../assets/imgs/cart_item_cap.png')}
+                style={{width: width * 0.95, height: width * 0.15}}
+              />
               <Text
                 color="amber.300"
-                fontSize="20"
+                fontSize="22"
                 fontFamily="CenturyGothic"
-                mb="2">
+                mt={-height * 0.06}>
                 {product.name}
               </Text>
-              <HStack>
+              <HStack mt={height * 0.03}>
                 <Image
                   source={{uri: product.img}}
                   style={{
@@ -174,7 +179,13 @@ export const Cart = () => {
           </Text>
           <Button
             variant="link"
-            _text={{color: 'white', fontSize: 18, fontFamily: 'CenturyGothic'}}>
+            _text={{
+              color: 'white',
+              fontSize: 18,
+              fontFamily: 'CenturyGothic',
+              textDecorationLine: 'underline',
+            }}
+            onPress={() => props.navigation.navigate('order')}>
             Checkout
           </Button>
         </HStack>
