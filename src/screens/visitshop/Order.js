@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import {Image, useWindowDimensions} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import {Image, useWindowDimensions, ActivityIndicator} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
-  ScrollView,
-  IconButton,
   Icon,
   HStack,
   Text,
@@ -11,13 +10,21 @@ import {
   View,
   Button,
   Divider,
+  Pressable,
 } from 'native-base';
+import {useStripe} from '@stripe/stripe-react-native';
+import Toast from 'react-native-toast-message';
 import {Layout} from '../../components/Layout';
 import {useCart} from '../../context/Cart';
+import {useUser} from '../../context/User';
+import {baseUrl} from '../../utils/util';
 
 export const Order = props => {
   const {height, width} = useWindowDimensions();
+  const isFocused = useIsFocused();
   const {cartData, onCart} = useCart();
+  const {userData} = useUser();
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
   const screenInfo = {
     title: 'Your Order',
@@ -27,6 +34,91 @@ export const Order = props => {
     isCart: true,
   };
 
+  const [paymentMethod, setPaymentMethod] = useState('credit_card');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    initializePaymentSheet();
+  }, [isFocused]);
+
+  const initializePaymentSheet = async () => {
+    const totalAmount =
+      (cartData.reduce(
+        (accumulator, currentProduct) =>
+          accumulator +
+          currentProduct.amount * parseFloat(currentProduct.price),
+        0,
+      ) +
+        50) *
+      100;
+
+    const token = userData.access_token;
+    const url = `${baseUrl}/payment/stripe`;
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify({
+        amount: totalAmount,
+      }),
+    };
+    try {
+      setLoading(true);
+      const result = await fetch(url, options);
+      const resResult = await result.json();
+      if (!resResult.status) {
+        Toast.show({
+          type: 'error',
+          text1: resResult.message,
+        });
+      } else {
+        const paymentData = resResult.results;
+        const {error} = await initPaymentSheet({
+          merchantDisplayName: 'Andrea Plesha',
+          customerId: paymentData.customer,
+          customerEphemeralKeySecret: paymentData.ephemeralKey,
+          paymentIntentClientSecret: paymentData.paymentIntent,
+          allowsDelayedPaymentMethods: false,
+          defaultBillingDetails: {
+            name: 'Naixu Wang',
+          },
+        });
+        if (!error) {
+          setLoading(false);
+        }
+      }
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network not working',
+      });
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const {error} = await presentPaymentSheet();
+    if (error) {
+      if (error.code !== 'Canceled') {
+        Toast.show({
+          type: 'error',
+          text1: `Error code: ${error.code}`,
+          text2: error.message,
+        });
+      }
+    } else {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Your payment is success!',
+      });
+      onCart([]);
+      props.navigation.navigate('visit_shop');
+    }
+  };
+
   return (
     <Layout screenInfo={screenInfo}>
       <Center>
@@ -34,8 +126,8 @@ export const Order = props => {
           width={width * 0.92}
           bg="primary.700"
           px="6"
-          pb="3"
-          mt={height * 0.08}
+          pb="8"
+          mt={height * 0.09}
           alignItems="center"
           borderColor="amber.400"
           borderRadius="10"
@@ -117,7 +209,8 @@ export const Order = props => {
                   size="md"
                   color="white"
                 />
-              }>
+              }
+              onPress={() => setPaymentMethod('credit_card')}>
               Credit Card
             </Button>
             <Button
@@ -136,10 +229,60 @@ export const Order = props => {
                   size="md"
                   color="white"
                 />
-              }>
+              }
+              onPress={() => setPaymentMethod('paypal')}>
               Paypal
             </Button>
           </HStack>
+          {loading ? (
+            <Center bg="primary.500" borderRadius="4" width="95%" mt="4" py="3">
+              <ActivityIndicator size="small" color="white" />
+            </Center>
+          ) : (
+            <Pressable onPress={openPaymentSheet}>
+              {({isPressed}) => {
+                return (
+                  <Center>
+                    <HStack
+                      justifyContent="space-between"
+                      alignItems="center"
+                      width="95%"
+                      bg={isPressed ? 'primary.600' : 'primary.500'}
+                      borderRadius="4"
+                      mt="4"
+                      px="6"
+                      py={paymentMethod === 'credit_card' ? '2' : '0'}>
+                      <Text
+                        color="white"
+                        fontSize="18"
+                        fontFamily="CenturyGothic">
+                        Check out with
+                      </Text>
+                      {paymentMethod === 'credit_card' ? (
+                        <Image
+                          source={require('../../assets/imgs/credit_card_1.png')}
+                          style={{
+                            width: width * 0.15,
+                            height: height * 0.05,
+                            resizeMode: 'stretch',
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={require('../../assets/imgs/paypal_logo.png')}
+                          style={{
+                            width: width * 0.21,
+                            height: height * 0.07,
+                            resizeMode: 'stretch',
+                          }}
+                        />
+                      )}
+                    </HStack>
+                  </Center>
+                );
+              }}
+            </Pressable>
+          )}
         </View>
       </Center>
     </Layout>
