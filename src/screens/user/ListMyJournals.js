@@ -11,7 +11,7 @@ import {ConfirmDialog} from '../../components/ConfirmDialog';
 export const ListMyJournals = () => {
   const isFocused = useIsFocused();
 
-  const {height, width} = useWindowDimensions();
+  const {height} = useWindowDimensions();
   const {userData} = useUser();
 
   const screenInfo = {
