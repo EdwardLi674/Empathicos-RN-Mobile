@@ -14,7 +14,7 @@ import {
 import RenderHtml from 'react-native-render-html';
 import {Layout} from '../../components/Layout';
 import {useCart} from '../../context/Cart';
-import {ConfirmDialog} from './components/ConfirmDialog';
+import {ConfirmDialog} from '../../components/ConfirmDialog';
 
 export const Cart = props => {
   const {height, width} = useWindowDimensions();
@@ -190,7 +190,12 @@ export const Cart = props => {
           </Button>
         </HStack>
       </Center>
-      <ConfirmDialog isOpen={isOpenDialog} onClosed={onCloseDialog} />
+      <ConfirmDialog
+        isOpen={isOpenDialog}
+        onClosed={onCloseDialog}
+        title="Delete"
+        content="Are you sure to remove the current item from your cart?"
+      />
     </Layout>
   );
 };

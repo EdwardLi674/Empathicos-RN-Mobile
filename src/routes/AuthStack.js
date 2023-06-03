@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/core';
 import {Home} from '../screens/Home';
 import {Profile} from '../screens/user/Profile';
+import {ListMyJournals} from '../screens/user/ListMyJournals';
 import {Invite} from '../screens/user/Invite';
 import {Favorite} from '../screens/user/Favorite';
 import {Journey} from '../screens/journey/Journey';
@@ -197,6 +198,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="profile"
         component={Profile}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="list_my_journals"
+        component={ListMyJournals}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

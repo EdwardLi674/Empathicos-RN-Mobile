@@ -134,7 +134,7 @@ export const MyJournal = props => {
         zIndex={1}
         // pb="4"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView style={{marginTop: height * 0.05}}>
+        <ScrollView style={{marginTop: height * 0.08}}>
           <VStack space={3} alignItems="center" px="6">
             <Text
               fontSize="md"

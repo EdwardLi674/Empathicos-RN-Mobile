@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {AlertDialog, Button, Text} from 'native-base';
 
 export const ConfirmDialog = props => {
-  const {isOpen, onClosed} = props;
+  const {isOpen, onClosed, title, content} = props;
   const cancelRef = useRef(null);
 
   return (
@@ -14,12 +14,12 @@ export const ConfirmDialog = props => {
         <AlertDialog.CloseButton />
         <AlertDialog.Header>
           <Text fontFamily="CenturyGothic" fontSize="18" color="black">
-            Delete
+            {title}
           </Text>
         </AlertDialog.Header>
         <AlertDialog.Body>
           <Text fontSize="16" fontFamily="CenturyGothic">
-            Are you sure to remove the current item from your cart?
+            {content}
           </Text>
         </AlertDialog.Body>
         <AlertDialog.Footer>

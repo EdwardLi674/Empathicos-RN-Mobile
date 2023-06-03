@@ -153,6 +153,16 @@ export const Header = props => {
                 onItemPress={() => navigation.navigate('profile')}
               />
               <AvatarMenuItem
+                title="My Journals"
+                icon="newspaper"
+                onItemPress={() => navigation.navigate('list_my_journals')}
+              />
+              <AvatarMenuItem
+                title="Self-Inquiry"
+                icon="head-question"
+                onItemPress={() => navigation.navigate('list_self_inquiries')}
+              />
+              <AvatarMenuItem
                 title="Invite Friends"
                 icon="account-multiple"
                 onItemPress={() => navigation.navigate('invite')}
