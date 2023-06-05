@@ -31,6 +31,7 @@ import {Shop} from '../screens/visitshop/Shop';
 import {Product} from '../screens/visitshop/Product';
 import {Cart} from '../screens/visitshop/Cart';
 import {Order} from '../screens/visitshop/Order';
+import {BuyProduct} from '../screens/visitshop/BuyProduct';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -374,6 +375,13 @@ export const AuthStack = () => {
       <Drawer.Screen
         name="cart"
         component={Cart}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+      <Drawer.Screen
+        name="buy_product"
+        component={BuyProduct}
         options={{
           drawerItemStyle: {display: 'none'},
         }}

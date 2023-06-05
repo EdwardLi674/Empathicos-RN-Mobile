@@ -91,8 +91,8 @@ export const Shop = () => {
     onCart(tempCartData);
   };
 
-  const onBuyNowPress = () => {
-    console.log('product is purchased now');
+  const onBuyNowPress = product => {
+    navigation.navigate('buy_product', {product: product});
   };
 
   const onDetailPress = product => {
@@ -173,7 +173,7 @@ export const Shop = () => {
                         variant="outline"
                         colorScheme="secondary"
                         py="1"
-                        onPress={onBuyNowPress}
+                        onPress={() => onBuyNowPress(product)}
                         _text={{color: 'white', fontFamily: 'CenturyGothic'}}>
                         Buy Now
                       </Button>
