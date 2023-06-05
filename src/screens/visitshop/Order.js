@@ -26,6 +26,7 @@ export const Order = props => {
   const {height, width} = useWindowDimensions();
   const isFocused = useIsFocused();
   const {cartData, onCart} = useCart();
+
   const {userData} = useUser();
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
@@ -36,10 +37,12 @@ export const Order = props => {
     footer: '1',
     isCart: true,
   };
+  const [shippingCharge, setShippingCharge] = useState(0);
 
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
-  const [stripeLoading, setStripeLoading] = useState(false);
-  const [paypalLoading, setPaypalLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  // const [stripeLoading, setStripeLoading] = useState(false);
+  // const [paypalLoading, setPaypalLoading] = useState(false);
 
   // paypal payment state variables
   const [accessToken, setAccessToken] = useState(null);
@@ -48,8 +51,9 @@ export const Order = props => {
   const [showPaypalPanel, setShowPaypalPanel] = useState(false);
 
   useEffect(() => {
-    initializeStripePayment();
-    initializePaypalPayment();
+    // initializeStripePayment();
+    // initializePaypalPayment();
+    initializePayment();
   }, [isFocused]);
 
   const onPaymentBtnPress = () => {
@@ -60,20 +64,49 @@ export const Order = props => {
     }
   };
 
-  /* ----------------- Stripe payment -----------------*/
-  const initializeStripePayment = async () => {
+  const initializePayment = async () => {
+    const token = userData.access_token;
+
+    setLoading(true);
+    // getting the shipping charge value set by admin
+    var url = `${baseUrl}/payment/shipping-charges`;
+    var shipping_charge = 0;
+    var options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    try {
+      const result = await fetch(url, options);
+      const resResult = await result.json();
+      if (!resResult.status) {
+        Toast.show({
+          type: 'error',
+          text1: resResult.message,
+        });
+        return;
+      } else {
+        shipping_charge = parseFloat(resResult.results.shipping_charge);
+        setShippingCharge(shipping_charge);
+      }
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network not working',
+      });
+    }
+
     const totalAmount =
-      (cartData.reduce(
+      cartData.reduce(
         (accumulator, currentProduct) =>
           accumulator +
           currentProduct.amount * parseFloat(currentProduct.price),
         0,
-      ) +
-        50) *
-      100;
+      ) + shipping_charge;
 
-    const token = userData.access_token;
-    const url = `${baseUrl}/payment/stripe`;
+    /* ----------------- Stripe payment -----------------*/
+    var url = `${baseUrl}/payment/stripe`;
     var options = {
       method: 'POST',
       headers: {
@@ -82,11 +115,10 @@ export const Order = props => {
         Authorization: 'Bearer ' + token,
       },
       body: JSON.stringify({
-        amount: totalAmount,
+        amount: totalAmount * 100,
       }),
     };
     try {
-      setStripeLoading(true);
       const result = await fetch(url, options);
       const resResult = await result.json();
       if (!resResult.status) {
@@ -106,8 +138,11 @@ export const Order = props => {
             name: 'Naixu Wang',
           },
         });
-        if (!error) {
-          setStripeLoading(false);
+        if (error) {
+          Toast.show({
+            type: 'error',
+            text1: 'Stripe payment initialization error',
+          });
         }
       }
     } catch (err) {
@@ -116,39 +151,8 @@ export const Order = props => {
         text1: 'Network not working',
       });
     }
-  };
 
-  const openStripePayment = async () => {
-    const {error} = await presentPaymentSheet();
-    if (error) {
-      if (error.code !== 'Canceled') {
-        Toast.show({
-          type: 'error',
-          text1: `Error code: ${error.code}`,
-          text2: error.message,
-        });
-      }
-    } else {
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Your payment is success!',
-      });
-      onCart([]);
-      props.navigation.navigate('visit_shop');
-    }
-  };
-
-  /* ----------------- Paypal payment -----------------*/
-  const initializePaypalPayment = async () => {
-    const totalAmount =
-      cartData.reduce(
-        (accumulator, currentProduct) =>
-          accumulator +
-          currentProduct.amount * parseFloat(currentProduct.price),
-        0,
-      ) + 50;
-
+    /* ----------------- Paypal payment -----------------*/
     const dataDetail = {
       intent: 'sale',
       payer: {
@@ -214,6 +218,7 @@ export const Order = props => {
       const approval_url = links.find(data => data.rel == 'approval_url');
       setPaymentId(payment_id);
       setApprovalUrl(approval_url.href);
+      setLoading(false);
     } catch (err) {
       Toast.show({
         type: 'error',
@@ -222,6 +227,28 @@ export const Order = props => {
     }
   };
 
+  /* ----------------- Stripe payment -----------------*/
+  const openStripePayment = async () => {
+    const {error} = await presentPaymentSheet();
+    if (error) {
+      if (error.code !== 'Canceled') {
+        Toast.show({
+          type: 'error',
+          text1: `Error code: ${error.code}`,
+          text2: error.message,
+        });
+      }
+    } else {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Your payment is success!',
+      });
+      savePaymentData('stripe');
+    }
+  };
+
+  /* ----------------- Paypal payment -----------------*/
   const openPaypalPayment = () => {
     setShowPaypalPanel(true);
   };
@@ -254,8 +281,8 @@ export const Order = props => {
           text1: 'Success',
           text2: 'Your payment is success!',
         });
-        onCart([]);
-        props.navigation.navigate('visit_shop');
+        setShowPaypalPanel(false);
+        savePaymentData('paypal');
       } else {
         Toast.show({
           type: 'error',
@@ -266,6 +293,7 @@ export const Order = props => {
     }
   };
 
+  // helper function
   const getParamFromUrl = (name, url) => {
     name = name.replace(/[\[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -273,6 +301,43 @@ export const Order = props => {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  };
+
+  const savePaymentData = async payment_method => {
+    const url = `${baseUrl}/payment/create`;
+    const token = userData.access_token;
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify({
+        payment_status: 'success',
+        payment_method: payment_method,
+        items: cartData,
+      }),
+    };
+    setLoading(true);
+    try {
+      const result = await fetch(url, options);
+      const resResult = await result.json();
+      setLoading(false);
+      if (!resResult.status) {
+        Toast.show({
+          type: 'error',
+          text1: resResult.message,
+        });
+      }
+      onCart([]);
+      props.navigation.navigate('visit_shop');
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network not working',
+      });
+    }
   };
 
   return (
@@ -351,7 +416,7 @@ export const Order = props => {
                 Shipping Charges
               </Text>
               <Text color="white" fontSize="18" fontFamily="CenturyGothic">
-                $50.00
+                ${shippingCharge.toFixed(2)}
               </Text>
             </HStack>
             <Divider mt="2" w="100%" bg="blue.400" />
@@ -370,7 +435,7 @@ export const Order = props => {
                       accumulator +
                       currentProduct.amount * parseFloat(currentProduct.price),
                     0,
-                  ) + 50
+                  ) + shippingCharge
                 ).toFixed(2)}
               </Text>
             </HStack>
@@ -415,7 +480,7 @@ export const Order = props => {
                 Paypal
               </Button>
             </HStack>
-            {stripeLoading || paypalLoading ? (
+            {loading ? (
               <Center
                 bg="primary.500"
                 borderRadius="4"

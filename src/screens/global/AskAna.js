@@ -20,7 +20,7 @@ import {PlainTextArea} from '../../components/PlainTextArea';
 import {PlainInput} from '../../components/PlainInput';
 import {PlainBtn} from '../../components/PlainBtn';
 
-export const AskAna = () => {
+export const AskAna = props => {
   const screenInfo = {
     title: 'Ask Ana',
     subTitle: '',
@@ -124,7 +124,7 @@ export const AskAna = () => {
           w={width * 0.9}
           h={height * 0.53}
           ml="6"
-          mt="10"
+          mt={height * 0.07}
           bg="white"
           opacity="0.85"
           borderRadius="xl"
@@ -201,7 +201,7 @@ export const AskAna = () => {
               fontWeight: 'bold',
             }}
             onPress={() => {
-              console.log('hello');
+              props.navigation.navigate('visit_shop');
             }}>
             Book a Reading
           </Button>
