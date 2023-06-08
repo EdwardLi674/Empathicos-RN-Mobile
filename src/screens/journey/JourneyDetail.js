@@ -148,7 +148,7 @@ export const JourneyDetail = props => {
             style={{marginTop: '50%'}}
           />
         ) : (
-          <Center mt="8" zIndex="1">
+          <Center mt={height * 0.08} zIndex="1">
             <HStack>
               <Pressable onPress={onListViewPress}>
                 {showStatus === 'listview' ? (

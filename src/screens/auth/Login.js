@@ -114,7 +114,7 @@ export const Login = () => {
           borderRadius="md"
           zIndex={1}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <ScrollView px="6" pt="2">
+          <ScrollView px="6" pt={height * 0.04}>
             <Center>
               <Text
                 color="light.50"

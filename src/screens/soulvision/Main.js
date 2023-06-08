@@ -90,7 +90,7 @@ export const SoulVision = props => {
                   onBtnPress={() => onEmpaBtnPress(menu.id)}
                   ht={45}
                   textMT={-9}
-                  iconMT={-22}
+                  iconMT={-8}
                 />
               ))}
             </VStack>

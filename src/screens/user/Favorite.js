@@ -58,8 +58,7 @@ export const Favorite = props => {
           text1: resResult.message,
         });
       } else {
-        console.log(resResult.results);
-        setFavorites(resResult.results);
+        if (resResult.results) setFavorites(resResult.results);
       }
     } catch (err) {
       Toast.show({
@@ -81,7 +80,7 @@ export const Favorite = props => {
             style={{marginTop: '50%'}}
           />
         ) : (
-          <ScrollView style={{height: height * 0.27}} mt="12">
+          <ScrollView style={{height: height * 0.27}} mt={height * 0.07}>
             <Center zIndex="1">
               {favorites.map(favorite => (
                 <Pressable

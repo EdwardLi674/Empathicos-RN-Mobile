@@ -92,7 +92,7 @@ export const MagicDoorMenus = props => {
               mb="8">
               Choose Your Journey
             </Text>
-            <VStack space={8} pb="5">
+            <VStack space={10} pb="5">
               {menus.map(menu => (
                 <EmpaBtn
                   title={menu.title}
@@ -101,7 +101,7 @@ export const MagicDoorMenus = props => {
                   onBtnPress={() => onEmpaBtnPress(menu)}
                   ht={45}
                   textMT={-9}
-                  iconMT={-22}
+                  iconMT={-8}
                 />
               ))}
             </VStack>

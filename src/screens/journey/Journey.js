@@ -120,9 +120,9 @@ export const Journey = props => {
         ) : (
           <View
             w={width}
-            h={height * 0.52}
+            h={height * 0.53}
             ml="4"
-            mt="10"
+            mt={height * 0.07}
             zIndex={1}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <FlatList

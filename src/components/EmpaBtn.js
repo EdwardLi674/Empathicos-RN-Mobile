@@ -7,9 +7,10 @@ import {
   Modal,
   Button,
   ScrollView,
+  IconButton,
 } from 'native-base';
 import {StyleSheet, Image, useWindowDimensions} from 'react-native';
-import RenderHtml from 'react-native-render-html';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const EmpaBtn = props => {
   const {title, info, onBtnPress, ht, textMT, iconMT} = props;
@@ -29,11 +30,19 @@ export const EmpaBtn = props => {
           <Text fontSize="lg" color="white" style={styles.btn} mt={textMT}>
             {title}
           </Text>
-          <WarningOutlineIcon
-            color="amber.300"
+          <IconButton
+            color="warning.400"
+            variant="ghost"
             style={styles.warningIcon}
             mt={iconMT}
-            onPress={() => setShowInfoModal(true)}
+            _icon={{
+              as: MaterialCommunityIcons,
+              name: 'alert-circle-outline',
+              color: '#fcd34d',
+            }}
+            onPress={() => {
+              setShowInfoModal(true);
+            }}
           />
         </Center>
       </Pressable>
@@ -87,7 +96,6 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   warningIcon: {
-    marginRight: 10,
     alignSelf: 'flex-end',
   },
 });

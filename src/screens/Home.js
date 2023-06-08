@@ -94,7 +94,7 @@ export const Home = props => {
           />
         ) : (
           <View mt={height * 0.08} zIndex={1}>
-            <VStack space={5} pb="5">
+            <VStack space={1} pb="5">
               {menus.map(menu => (
                 <EmpaBtn
                   title={menu.title}
@@ -103,7 +103,7 @@ export const Home = props => {
                   onBtnPress={() => onEmpaBtnPress(menu.id)}
                   ht={35}
                   textMT={-8}
-                  iconMT={-22}
+                  iconMT={-8}
                 />
               ))}
             </VStack>
