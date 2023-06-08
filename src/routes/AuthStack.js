@@ -39,11 +39,55 @@ import {
 } from '@react-navigation/drawer';
 import Share from 'react-native-share';
 import {Linking} from 'react-native';
+import {useUser} from '../context/User';
+import {baseUrl} from '../utils/util';
+import Toast from 'react-native-toast-message';
 
 // const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = props => {
+  const {userData} = useUser();
+
+  const [aboutInfos, setAboutInfos] = useState([]);
+
+  useEffect(() => {
+    getAboutInfos();
+  }, []);
+
+  const getAboutInfos = async () => {
+    const token = userData.access_token;
+    const url = `${baseUrl}/abouts`;
+    var options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    try {
+      const result = await fetch(url, options);
+      const resResult = await result.json();
+      if (!resResult.status) {
+        Toast.show({
+          type: 'error',
+          text1: resResult.message,
+        });
+      } else {
+        const aboutInfos = resResult.results;
+        setAboutInfos(aboutInfos);
+      }
+    } catch (err) {
+      Toast.show({
+        type: 'error',
+        text1: 'Network not working',
+      });
+    }
+  };
+
+  const onAboutMenuPress = aboutInfo => {
+    props.navigation.navigate('about', {about: aboutInfo});
+  };
+
   const onSharePress = () => {
     let options = {
       title: 'Empathicos',
@@ -97,18 +141,20 @@ const CustomDrawerContent = props => {
           fontWeight: 'normal',
         }}
       />
-      <DrawerItem
-        label="About Empathicos"
-        onPress={() =>
-          props.navigation.navigate('about', {title: 'Empathicos'})
-        }
-        inactiveTintColor="white"
-        labelStyle={{
-          fontFamily: 'CenturyGothic',
-          fontSize: 17,
-          fontWeight: 'normal',
-        }}
-      />
+      {aboutInfos.map(about => (
+        <DrawerItem
+          key={about.id}
+          label={`About ${about.name}`}
+          onPress={() => onAboutMenuPress(about)}
+          inactiveTintColor="white"
+          labelStyle={{
+            fontFamily: 'CenturyGothic',
+            fontSize: 17,
+            fontWeight: 'normal',
+          }}
+        />
+      ))}
+      {/*
       <DrawerItem
         label="About Alesha"
         onPress={() => props.navigation.navigate('about', {title: 'alesha'})}
@@ -140,7 +186,7 @@ const CustomDrawerContent = props => {
           fontSize: 17,
           fontWeight: 'normal',
         }}
-      />
+      /> */}
       <DrawerItem
         label="Send Feedback"
         onPress={() => props.navigation.navigate('feedback')}

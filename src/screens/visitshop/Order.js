@@ -362,7 +362,7 @@ export const Order = props => {
               onNavigationStateChange={onNavigationStateChange}
               javaScriptEnabled={true}
               domStorageEnabled={true}
-              startInLoadingState={false}
+              startInLoadingState={true}
             />
           </View>
         </Center>
