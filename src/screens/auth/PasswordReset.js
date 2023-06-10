@@ -10,13 +10,12 @@ import {
   Text,
   KeyboardAvoidingView,
 } from 'native-base';
-import {useUser} from '../../context/User';
 import {Layout} from '../../components/Layout';
 import {FormBtn} from '../../components/FormBtn';
 import {FormInput} from '../../components/FormInput';
 import {baseUrl} from '../../utils/util';
 
-export const Login = () => {
+export const PasswordReset = () => {
   const screenInfo = {
     title: 'Empathicos',
     subTitle: '',
@@ -28,15 +27,11 @@ export const Login = () => {
 
   const navigation = useNavigation();
 
-  const user = useUser();
-
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [emailErr, setEmailErr] = useState('');
-  const [PasswordErr, setPasswordErr] = useState('');
 
-  const onLogin = async () => {
+  const onSubmit = async () => {
     if (!email) {
       setEmailErr('Email is required.');
       return;
@@ -48,12 +43,7 @@ export const Login = () => {
       }
     }
 
-    if (!password) {
-      setPasswordErr('Password is required.');
-      return;
-    }
-
-    const url = `${baseUrl}/auth/signin`;
+    const url = `${baseUrl}/auth/password/email`;
     var options = {
       method: 'POST',
       headers: {
@@ -62,7 +52,6 @@ export const Login = () => {
       },
       body: JSON.stringify({
         email: email,
-        password: password,
       }),
     };
     setLoading(true);
@@ -76,7 +65,13 @@ export const Login = () => {
           text1: resResult.message,
         });
       } else {
-        user.onUser(resResult.results);
+        Toast.show({
+          type: 'success',
+          text1: 'Password Recovery',
+          text2: resResult.message,
+          visibilityTime: 6000,
+        });
+        navigation.navigate('password_update');
       }
     } catch (err) {
       Toast.show({
@@ -89,19 +84,6 @@ export const Login = () => {
   const onEmailChanged = txt => {
     setEmailErr('');
     setEmail(txt);
-  };
-
-  const onPasswordChanged = txt => {
-    setPasswordErr('');
-    setPassword(txt);
-  };
-
-  const onRegisterPress = () => {
-    navigation.navigate('register');
-  };
-
-  const onPasswordResetPress = () => {
-    navigation.navigate('password_reset');
   };
 
   return (
@@ -126,49 +108,39 @@ export const Login = () => {
                 fontWeight="700"
                 fontSize="2xl"
                 textAlign="center">
-                Login
+                Password Reset
+              </Text>
+              <Text
+                color="light.50"
+                fontFamily="CenturyGothic"
+                fontSize="md"
+                textAlign="center"
+                mt="4">
+                Enter your email for the verification process. We will send 6
+                digits code to your email.
               </Text>
               <FormInput
-                mt="2"
+                mt="4"
                 label="Email"
                 isRequired={true}
                 errMsg={emailErr}
                 value={email}
                 onChange={txt => onEmailChanged(txt)}
               />
-              <FormInput
-                mt="4"
-                label="Password"
-                isRequired={true}
-                errMsg={PasswordErr}
-                value={password}
-                onChange={txt => onPasswordChanged(txt)}
-              />
-              <View mt="8">
+              <View mt="6">
                 <FormBtn
-                  title="Login"
-                  onBtnPress={() => onLogin()}
+                  title="Submit"
+                  onBtnPress={() => onSubmit()}
                   loading={loading}
                 />
               </View>
-              <View mt="5">
-                <Pressable onPress={onRegisterPress}>
-                  <Text
-                    color="pink.700"
-                    fontFamily="CenturyGothic"
-                    fontSize="lg"
-                    fontWeight="bold">
-                    Register
-                  </Text>
-                </Pressable>
-              </View>
-              <View mt="3">
-                <Pressable onPress={onPasswordResetPress}>
+              <View mt="6">
+                <Pressable onPress={() => navigation.goBack()}>
                   <Text
                     color="green.300"
                     fontFamily="CenturyGothic"
                     fontSize="lg">
-                    Password Reset
+                    Go Back
                   </Text>
                 </Pressable>
               </View>
