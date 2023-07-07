@@ -28,7 +28,7 @@ const App = () => {
     <UserProvider>
       <CartProvider>
         <NativeBaseProvider>
-          <StripeProvider publishableKey="pk_test_51MG8BHBbj0brRoCCvv24fspc9mTjGQ1tgZ29axzXQbzjrlDA1RSXEsAthaL24COZipsAtWvn9IZUVjbNP4W3N0b500Ln4NCKOq">
+          <StripeProvider publishableKey="pk_live_51LPYbVIF1mMHT4Wpnqm6UP2ZZrqL9XPAUmhpKWpK7l2qsfWAFi4p1fj5zDgj8dsnBFbXQyBsg3VJzgPqNHzhVMtQ00YdTrC0M8">
             <WithSplashScreen isAppReady={isAppReady}>
               <Router />
               <Toast />

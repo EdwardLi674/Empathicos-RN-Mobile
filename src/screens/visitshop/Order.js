@@ -459,7 +459,7 @@ export const Order = props => {
                 onPress={() => setPaymentMethod('credit_card')}>
                 Credit Card
               </Button>
-              <Button
+              {/* <Button
                 variant="ghost"
                 mx="4"
                 px="1"
@@ -478,7 +478,7 @@ export const Order = props => {
                 }
                 onPress={() => setPaymentMethod('paypal')}>
                 Paypal
-              </Button>
+              </Button> */}
             </HStack>
             {loading ? (
               <Center
