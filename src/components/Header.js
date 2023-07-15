@@ -21,6 +21,7 @@ import {AvatarMenuItem} from './AvatarMenuItem';
 import {baseUrl} from '../utils/util';
 import {HeaderBg} from './HeaderBg';
 import {useCart} from '../context/Cart';
+import {ConfirmDialog} from './ConfirmDialog';
 
 export const Header = props => {
   const {screenInfo} = props;
@@ -31,6 +32,7 @@ export const Header = props => {
   const {height, width} = useWindowDimensions();
 
   const [loading, setLoading] = useState(false);
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
 
   const onGoBackScreen = () => {
     navigation.goBack();
@@ -65,6 +67,38 @@ export const Header = props => {
         text1: 'Network not working',
       });
     }
+  };
+
+  const onCloseDialog = async selected => {
+    if (selected === 'ok') {
+      const token = userData.access_token;
+
+      const url = `${baseUrl}/account/delete`;
+      const options = {
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+      };
+      try {
+        const result = await fetch(url, options);
+        const resResult = await result.json();
+        if (!resResult.status) {
+          Toast.show({
+            type: 'error',
+            text1: resResult.message,
+          });
+        } else {
+          onLogout();
+        }
+      } catch (err) {
+        Toast.show({
+          type: 'error',
+          text1: 'Network not working',
+        });
+      }
+    }
+    setIsOpenDialog(false);
   };
 
   const onCartPress = () => {
@@ -179,6 +213,11 @@ export const Header = props => {
               />
               <Divider mt="2" w="100%" />
               <AvatarMenuItem
+                title="Delete Account"
+                icon="account-remove"
+                onItemPress={() => setIsOpenDialog(true)}
+              />
+              <AvatarMenuItem
                 title="Logout"
                 icon="logout"
                 onItemPress={onLogoutPress}
@@ -191,6 +230,12 @@ export const Header = props => {
         <Text style={styles.title}>{screenInfo.title}</Text>
         <Text style={styles.subtitle}>{screenInfo.subTitle}</Text>
       </VStack>
+      <ConfirmDialog
+        isOpen={isOpenDialog}
+        onClosed={onCloseDialog}
+        title="Delete"
+        content="Are you sure to delete the current your own account?"
+      />
     </View>
   );
 };
